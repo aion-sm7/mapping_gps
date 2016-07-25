@@ -1,5 +1,7 @@
 .idea
 *.png
 *.csv
+*.TXT
+
 basemap-1.0.7
 .python-version
