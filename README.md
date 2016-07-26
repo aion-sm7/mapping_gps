@@ -1,12 +1,10 @@
-Mapping GPS on real map
+Mapping GPS row data (NMEA format) on real map
 ====
 
-Overview
-
-Arduino + GPSからとってきた位置情報を可視化する
-Python + OpenStreetMapを使ってNENA(?)形式の生データをフォーマットしてからplotをする
-
-
+# Overview
+Arduino + GPSモジュールから取得したGPS生データNMEA形式を実際の地図上へマッピングする．
+テキスト処理およびMappingには，Pythonを使用している．
+また地図データは，(OpenStreetMap)[]から取得し，使用している
 ## Description
 
 ## Demo
@@ -20,6 +18,10 @@ pythonの環境は以下のとおりにして設定する
 
 
 ## Usage
+
+```bash
+python main.py
+```
 
 ## Install
 
