@@ -22,12 +22,6 @@ pythonの環境は以下のとおりにして設定する
 python main.py
 ```
 
-## Install
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Contribution
 
 ## Licence
