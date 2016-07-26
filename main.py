@@ -1,6 +1,8 @@
 import matplotlib
 matplotlib.use('TkAgg')
-import requests, sys, time
+import requests
+import sys
+import time
 from io import BytesIO
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
@@ -14,7 +16,7 @@ MIN_SIZE = 20
 MAX_SIZE = 200
 
 
-# Retrive static OpenStreetMap
+# get OpenStreetMap image
 def get_osm_img(minlat, minlon, maxlat, maxlon, scale=60000, img_format='png'):
     url = 'http://www.openstreetmap.org/export/finish'
     payload = {
@@ -30,25 +32,48 @@ def get_osm_img(minlat, minlon, maxlat, maxlon, scale=60000, img_format='png'):
     return Image.open(BytesIO(response.content))
 
 
-def csv_loader():
-    data = pd.read_csv('data.csv')
-    result = {}
-    result['lat'] = data['real latitute']
-    result['lon'] = data['real longtitute']
-    result['passenger'] = data['time']
+# load arduino GPS row txt data
+# and return formatted data
+def load_txt():
+    col_names = ['c{0:02d}'.format(i) for i in range(50)]
+    data = pd.read_csv('DATAGPS.TXT', names=col_names)
+    data = data[data.c00 == '$GPGGA']
+    data.columns = ['id', 'time', 'longitude', 'NorS', 'latitude', 'EorW'] + col_names[6:]
+    # print(data.head(4))
+    # print(data.latitude.apply(lambda x: x.split('.')[0][:-2] + '.' + str(float(x.split('.')[0][-2:])/60 + float(x.split('.')[1])/60)).head(5))
+    # print(data.latitude.apply(lambda x: x.split('.')[0][:-2]).head(5))
+    # print(data.latitude.apply(lambda x: float(x.split('.')[0][:-2]) + float(x.split('.')[0][-2:] + "." + x.split('.')[1])/60).head(5))
+    data.latitude = data.latitude.apply(
+        lambda x: float(x.split('.')[0][:-2]) + float(x.split('.')[0][-2:] + "." + x.split('.')[1]) / 60)
+    # print(data.head(5))
+    data.longitude = data.longitude.apply(
+        lambda x: float(x.split('.')[0][:-2]) + float(x.split('.')[0][-2:] + "." + x.split('.')[1]) / 60)
+    # print(data.head(5))
+    data.time = data.time.apply(
+        lambda x: float(x))
+    # print(min(data.latitude))
+    # print(max(data.latitude))
+    result = {
+        'lat': data.latitude,
+        'lon': data.longitude,
+        'passenger': data.time
+    }
     return result
 
 
+# main mapping function
 def mapping_gps_data():
     fig = plt.figure(figsize=(15, 15))
-    data = csv_loader()
+    data = load_txt()
 
+    print(min(data['passenger']))
+    print(max(data['passenger']))
     print(min(data['lat']))
     print(max(data['lat']))
     print(min(data['lon']))
     print(max(data['lon']))
 
-    minlat, minlon, maxlat, maxlon = 35.01, 135.74, 35.02, 135.77
+    minlat, minlon, maxlat, maxlon = 35.01, 135.75, 35.02, 135.76
     bmap = Basemap(projection='merc', llcrnrlat=minlat, urcrnrlat=maxlat, llcrnrlon=minlon, urcrnrlon=maxlon, lat_ts=0, resolution='l')
     x, y = bmap(data['lat'].values, data['lon'].values)
 
@@ -82,6 +107,5 @@ def mapping_gps_data():
 
 def main():
     mapping_gps_data()
-
 
 main()
