@@ -24,6 +24,10 @@ python main.py
 
 ## Install
 
+```bash
+pip install -r requirements.txt
+```
+
 ## Contribution
 
 ## Licence
