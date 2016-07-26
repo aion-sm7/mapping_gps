@@ -1,8 +1,31 @@
-# mapping_gps
-Mapping gps data
-Arduinoから受け取ったGPSデータを実際の地図上にマッピングする
+Mapping GPS on real map
+====
 
-## 要求
-requirements.txtの通り
+Overview
+
+Arduino + GPSからとってきた位置情報を可視化する
+Python + OpenStreetMapを使ってNENA(?)形式の生データをフォーマットしてからplotをする
 
 
+## Description
+
+## Demo
+
+## VS. 
+
+## Requirement
+### Python
+pythonの環境は以下のとおりにして設定する
+> http://qiita.com/duonys/items/c941bc2818abe5cc1da7
+
+
+## Usage
+
+## Install
+
+## Contribution
+
+## Licence
+
+
+## Author
